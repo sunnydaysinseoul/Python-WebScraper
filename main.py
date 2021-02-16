@@ -99,5 +99,26 @@ age_check(18)
 age_check(22)
 age_check(41)
 
+# for in (tuple/list의 값을 하나씩 엔터치며 출력가능!)
+fi_days = ("Mon","Tue","Wed","Thu","Fri")
+
+for x in fi_days: #여기서 'x'는 작업이 시작되면 생김! x는 배열의 item을 가리킴
+    print(x)
+
+#<< the "for" statement is used to iterate over the elements of a sequence
+#   (such as a "string", (tuple) or [list])
+#   or other literable object >>
+
+
+    #-- How to stop the For loop?
+for day in fi_days:
+    if day is "Wed":
+        break
+    else:
+        print(day) #결과 Mon
+                   #     Tue
+
+
+
 
 
