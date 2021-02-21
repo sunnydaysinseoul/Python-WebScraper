@@ -23,13 +23,27 @@ indeed_soup = BeautifulSoup(indeed_result.text, 'html.parser')
 pagination = indeed_soup.find("div",{"class":"pagination"})
 
 #페이지 번호가 있는 곳 : div(class='pagination) > a > span
-pages = pagination.find_all('a')
+links = pagination.find_all('a') #모든 a태그를 '리스트'로 가져오기
 
-spans = []
-for page in pages:
-    # print(page.find("span"))
-    spans.append(page.find("span"))
-spans = (spans[:-1]) # spans리스트의 마지막 항목(-1번째)은 항상 ">"(next button)이므로 지워주어야 함
-                  # -1번째 (=마지막)항목만 빼고 리스트의 모든 값을 가져와라.
+    # pages = []
+    # for link in links: # a리스트의 각 값마다 span찾는 loop돌리기
+    #     # print(page.find("span"))
+    #     pages.append(link.find("span").string) #span태그 안에있는 string(text)값만 가져오기
+    # pages = (pages[0:-1]) # spans리스트의 마지막 항목(-1번째)은 항상 ">"(next button)이므로 지워주어야 함
+    #                 # -1번째 (=마지막)항목만 빼고 리스트의 모든 값을 가져와라.
 
-print(spans)
+    # print(pages)
+
+# 더 간단하게 : <a>안에 바로 <span>만 있고 그 안에 string(페이지번호숫자)가 있으므로
+#               그냥 <a>에서 .string 을 해주어도 무관함!
+pages = []
+for link in links[0:-1]: #처음부터 link(a 태그)의 마지막거 (next button)은 제외하기
+    pages.append(int(link.string)) #페이지번호가 string으로 가져와지니까 integer로 변화해주기
+# print(pages) 
+
+max_page = pages[-1] #마지막 페이지번호 찾기
+
+print(range(max_page)) # range(n): create a sequence of numbers from 0 to n
+
+for n in range(max_page):
+    print(f"start={n*50}")
