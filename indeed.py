@@ -27,7 +27,25 @@ def extract_indeed_pages():
     max_page = pages[-1] #마지막 페이지번호 찾기
     # print(max_page) #확인용
     return max_page
+
+
+def extract_job(html):
+    title = html.find("h2",{"class":"title"}).find("a")["title"] #results list의 각 값(result)에서 class="title"인 <h2>를 찾고, 거기에 포함되는 class="title"인 <a>를 찾아서 출력하기.
+    # .find("a").string  #이렇게 하면 None이 포함되어 나옴
     
+    # company = result.find("span",{"class":"company"}).find("a") #---> span태그 안에 <a>가 한번 더 있고 그 안에 회사명이 있는애도있고 span안에 바로있는 애도 발견! :(
+    company_span = html.find("span",{"class":"company"})
+    
+    if company_span.find("a") is None: #company span이 <a>를 가지지 않을 때
+        company = company_span.string
+    else:
+        company = company_span.find("a").string
+
+        ## --- 만약에 가져온 .string값 앞뒤에 공백(whitespaec이 많이 나오면
+        ## ---  -> .strip(s[, chars])를 사용하면 됨.
+        ## --- .strip() = 빈칸 다 지우기 / .strip("F") = string에서 "F"를 다 지우기
+    
+    return {'title':title,'company':company}
 
 # page수 만큼 request하는 함수
 def extract_indeed_jobs(last_page):
@@ -39,20 +57,7 @@ def extract_indeed_jobs(last_page):
         results = soup.find_all("div",{"class":"jobsearch-SerpJobCard"}) # list
         # print(results)
         for result in results: #class="jobsearch-SerpJobCard"안에서 loop
-            title = result.find("h2",{"class":"title"}).find("a")["title"] #results list의 각 값(result)에서 class="title"인 <h2>를 찾고, 거기에 포함되는 class="title"인 <a>를 찾아서 출력하기.
-            # .find("a").string  #이렇게 하면 None이 포함되어 나옴
+            job = extract_job(result)
+            jobs.append(job)
             
-            # company = result.find("span",{"class":"company"}).find("a") #---> span태그 안에 <a>가 한번 더 있고 그 안에 회사명이 있는애도있고 span안에 바로있는 애도 발견! :(
-            company_span = result.find("span",{"class":"company"})
-            
-            if company_span.find("a") is None: #company span이 <a>를 가지지 않을 때
-                company = company_span.string
-            else:
-                company = company_span.find("a").string
-
-                ## --- 만약에 가져온 .string값 앞뒤에 공백(whitespaec이 많이 나오면
-                ## ---  -> .strip(s[, chars])를 사용하면 됨.
-                ## --- .strip() = 빈칸 다 지우기 / .strip("F") = string에서 "F"를 다 지우기
-            
-            print(title,company)
     return jobs
