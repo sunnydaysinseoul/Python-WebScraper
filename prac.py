@@ -15,7 +15,7 @@ youngsun = {
 }
 print(youngsun)
 youngsun["Handsome"] = True #Boolean value 추가하기
-print(youngsun)
+print(youngsun["age"])
 
 #-----function() -행동(기능)의 반복
 #Built-in functions

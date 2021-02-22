@@ -41,6 +41,14 @@ def extract_indeed_jobs(last_page):
         for result in results: #class="jobsearch-SerpJobCard"안에서 loop
             title = result.find("h2",{"class":"title"}).find("a")["title"] #results list의 각 값(result)에서 class="title"인 <h2>를 찾고, 거기에 포함되는 class="title"인 <a>를 찾아서 출력하기.
             # .find("a").string  #이렇게 하면 None이 포함되어 나옴
-            print(title)
+            
+            # company = result.find("span",{"class":"company"}).find("a") #---> span태그 안에 <a>가 한번 더 있고 그 안에 회사명이 있는애도있고 span안에 바로있는 애도 발견! :(
+            
+            
+            if result.find("span",{"class":"company"}).find("a") is None:
+                company = result.find("span",{"class":"company"}).string
+            else:
+                company = result.find("span",{"class":"company"}).find("a").string
+            
+            print(title,company)
     return jobs
-
