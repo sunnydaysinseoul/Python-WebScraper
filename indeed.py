@@ -43,12 +43,16 @@ def extract_indeed_jobs(last_page):
             # .find("a").string  #이렇게 하면 None이 포함되어 나옴
             
             # company = result.find("span",{"class":"company"}).find("a") #---> span태그 안에 <a>가 한번 더 있고 그 안에 회사명이 있는애도있고 span안에 바로있는 애도 발견! :(
+            company_span = result.find("span",{"class":"company"})
             
-            
-            if result.find("span",{"class":"company"}).find("a") is None:
-                company = result.find("span",{"class":"company"}).string
+            if company_span.find("a") is None: #company span이 <a>를 가지지 않을 때
+                company = company_span.string
             else:
-                company = result.find("span",{"class":"company"}).find("a").string
+                company = company_span.find("a").string
+
+                ## --- 만약에 가져온 .string값 앞뒤에 공백(whitespaec이 많이 나오면
+                ## ---  -> .strip(s[, chars])를 사용하면 됨.
+                ## --- .strip() = 빈칸 다 지우기 / .strip("F") = string에서 "F"를 다 지우기
             
             print(title,company)
     return jobs
