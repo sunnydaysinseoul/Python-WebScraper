@@ -44,20 +44,23 @@ def extract_job(html):
         ## --- 만약에 가져온 .string값 앞뒤에 공백(whitespaec이 많이 나오면
         ## ---  -> .strip(s[, chars])를 사용하면 됨.
         ## --- .strip() = 빈칸 다 지우기 / .strip("F") = string에서 "F"를 다 지우기
-    
-    return {'title':title,'company':company}
+    location = html.find("div",{"class":"recJobLoc"})["data-rc-loc"]
+    job_id = html["data-jk"]
+    return {'title':title,'company':company,'location':location,'link':f"https://kr.indeed.com/%EC%B1%84%EC%9A%A9%EB%B3%B4%EA%B8%B0?jk={job_id}"}
 
 # page수 만큼 request하는 함수
 def extract_indeed_jobs(last_page):
     jobs = []
     for page in range(last_page):
             #필요한 last_page는 main.py에서 지정해 줄 것임.
-        result = requests.get(f"{URL}&start={0*LIMIT}") #URL뒤에 &start=50 이런 숫자를 붙여서 페이지마다 값 가져오기
+        print(f"Now scrapping... page {page+1}")
+
+        result = requests.get(f"{URL}&start={page*LIMIT}") #URL뒤에 &start=50 이런 숫자를 붙여서 페이지마다 값 가져오기
         soup = BeautifulSoup(result.text, 'html.parser')
         results = soup.find_all("div",{"class":"jobsearch-SerpJobCard"}) # list
         # print(results)
         for result in results: #class="jobsearch-SerpJobCard"안에서 loop
             job = extract_job(result)
             jobs.append(job)
-            
+
     return jobs
