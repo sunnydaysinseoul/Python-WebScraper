@@ -7,7 +7,6 @@ from warnings import resetwarnings
 import requests
 from bs4 import BeautifulSoup
 
-page = 1
 URL = "https://stackoverflow.com/jobs?q=python"
 
 
@@ -48,7 +47,7 @@ def extract_jobs(last_page):
             job = extract_job(result)
             # print(job)
             jobs.append(job)  # 위에서 저장한 job변수를 jobs 리스트에 넣기.
-        return jobs
+    return jobs
 
 
 def get_jobs():
