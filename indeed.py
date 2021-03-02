@@ -11,7 +11,7 @@ LIMIT = 50 #한 페이지 공고 개수
 URL=f"https://kr.indeed.com/%EC%B7%A8%EC%97%85?q=python&l=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C&limit={LIMIT}&radius=25"
         #URL맨 뒤에 &start=50이 오면 50번째 글 부터 출력 되므로 페이지 2가 나옴. &start=100이면 페이지 3이 나오게 됨.
 
-def extract_indeed_pages():
+def get_last_page():
     result = requests.get(URL)
     soup = BeautifulSoup(result.text, 'html.parser')
 
@@ -29,7 +29,7 @@ def extract_indeed_pages():
     return max_page
 
 
-def extract_job(html):
+def extract_job(html): 
     title = html.find("h2",{"class":"title"}).find("a")["title"] #results list의 각 값(result)에서 class="title"인 <h2>를 찾고, 거기에 포함되는 class="title"인 <a>를 찾아서 출력하기.
     # .find("a").string  #이렇게 하면 None이 포함되어 나옴
     
@@ -49,11 +49,11 @@ def extract_job(html):
     return {'title':title,'company':company,'location':location,'link':f"https://kr.indeed.com/%EC%B1%84%EC%9A%A9%EB%B3%B4%EA%B8%B0?jk={job_id}"}
 
 # page수 만큼 request하는 함수
-def extract_indeed_jobs(last_page):
+def extract_jobs(last_page):
     jobs = []
     for page in range(last_page):
             #필요한 last_page는 main.py에서 지정해 줄 것임.
-        print(f"Now scrapping... page {page+1}")
+        print(f"Now scrapping... Indeed page {page+1}")
 
         result = requests.get(f"{URL}&start={page*LIMIT}") #URL뒤에 &start=50 이런 숫자를 붙여서 페이지마다 값 가져오기
         soup = BeautifulSoup(result.text, 'html.parser')
@@ -67,6 +67,6 @@ def extract_indeed_jobs(last_page):
 
 
 def get_jobs():
-    last_indeed_page = extract_indeed_pages()
-    indeed_jobs = extract_indeed_jobs(last_indeed_page)
-    return indeed_jobs
+    last_page = get_last_page()
+    jobs = extract_jobs(last_page)
+    return jobs
