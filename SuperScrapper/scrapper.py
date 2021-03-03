@@ -9,10 +9,10 @@ from warnings import resetwarnings
 import requests
 from bs4 import BeautifulSoup
 
-URL = "https://stackoverflow.com/jobs?q=python"
+#여기서는 python만이아니라 다양한 주소를 검색하고 싶기 때문에 URL를 미리 선언하지않고 
+# 유저 입력값(word)을 받아서 첫 get_jobs()함수 안에서 URL을 만들어줌.
 
-
-def get_last_page():  # 가져와야할 총 페이지수 구하기
+def get_last_page(URL):  # 가져와야할 총 페이지수 구하기
     result = requests.get(URL)
     soup = BeautifulSoup(result.text, 'html.parser')
     pages = soup.find("div", {"class": "s-pagination"}
@@ -35,7 +35,7 @@ def extract_job(html):
             'link': f"https://stackoverflow.com{link}"}
 
 
-def extract_jobs(last_page):
+def extract_jobs(last_page,URL):
     jobs = []
     for page in range(last_page):
         # print(page + 1) #페이지수 뽑아보기
@@ -53,6 +53,7 @@ def extract_jobs(last_page):
 
 
 def get_jobs(word):
-    last_page = get_last_page()  # 함수에서 return된 값을 받아와서 새로운 변수에 저장
-    jobs = extract_jobs(last_page)
+    url = f"https://stackoverflow.com/jobs?q={word}" #get_last_page(), extract_jobs에 넣어줄 URL
+    last_page = get_last_page(url)  # 함수에서 return된 값을 받아와서 새로운 변수에 저장
+    jobs = extract_jobs(last_page,url)
     return jobs
