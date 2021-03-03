@@ -2,9 +2,32 @@
 <html lang="en">
   <head>
     <title>Job Search</title>
+    <style>
+      section{
+        display:grid;
+        gap:20px;
+        grid-template-columns: repeat(4, 1fr);
+      }
+    </style>
   </head>
   <body>
     <h1>Job Search</h1>
-    <h3> You are looking for {{searchingBy}} .</h3> <!--main.py의 render_template에서 온 searchingBy-->
+    <!-- Flask의 중괄호두개 는 variable을 가져오는 방법-->
+    <h3> Found {{resultsNumber}}results for {{searchingBy}} .</h3> <!--main.py의 render_template에서 온 searchingBy-->
+    <section>
+      <h4>Title</h4>
+      <h4>Company</h4>
+      <h4>Location</h4>
+      <h4>Link</h4>
+
+      <!-- Flask html에서는 중괄호 퍼센트 안에 python문법 쓰기 가능! -->
+      {% for job in jobs %}
+      <!-- 표처럼 보이는 이유 : grid -->
+        <span>{{job.title}}</span>
+        <span>{{job.company}}</span>
+        <span>{{job.location}}</span>
+        <a href="{{job.link}}" target="_blank">Click here for details.</a>
+      {% endfor %}
+    </section>
   </body>
 </html>

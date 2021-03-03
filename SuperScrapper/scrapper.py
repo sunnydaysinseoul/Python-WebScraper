@@ -47,7 +47,6 @@ def extract_jobs(last_page,URL):
         for result in results:
             # 각각의 div를 하나씩 돌면서 extract_job을 돌려줌. ->여기서 나오는 return값을 job변수에 저장하기.
             job = extract_job(result)
-            # print(job)
             jobs.append(job)  # 위에서 저장한 job변수를 jobs 리스트에 넣기.
     return jobs
 
